@@ -1,0 +1,324 @@
+/* 训练流程 v2 · 统一背景、左对齐、内容撑满 */
+
+/* ── 训练 Tab 统一底色（不再白/黄乱跳） ── */
+#p1.da-training-page,
+.da-module-v2.da-module-page {
+  background: var(--da-cream);
+}
+
+.da-training-hub-host {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  flex: 1;
+  min-height: 0;
+  padding-bottom: 0;
+}
+
+/* 旧版试聊占位（若 HTML 未清干净则强制隐藏） */
+.da-training-hub-host > .da-p1-static-hero,
+.da-training-hub-host > .card,
+.da-training-hub-host > .card-w,
+.da-training-hub-host > .da-module-list:not(.da-hub-mod-list),
+.da-training-hub-host > div[style*='position:relative'],
+.da-training-hub-host > div[style*='grid-template-columns'] {
+  display: none !important;
+}
+
+/* ── 总览：左对齐进度 + 全宽横条 ── */
+.da-hub-card {
+  background: #fff;
+  border-radius: var(--da-radius-sm);
+  padding: 16px;
+  border: 1px solid var(--da-border);
+  box-shadow: 0 2px 12px rgba(28, 28, 24, 0.04);
+}
+
+.da-hub-sync {
+  margin: 0 0 10px;
+  font-size: 12px;
+  line-height: 1.45;
+  color: var(--da-muted);
+  text-align: left;
+}
+
+.da-hub-progress-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.da-hub-progress-head .hero-pct {
+  font-family: 'Noto Serif SC', serif;
+  font-size: 28px;
+  font-weight: 600;
+  color: var(--da-ink);
+  line-height: 1;
+}
+
+.da-hub-pbar {
+  width: 100%;
+  max-width: none;
+  height: 6px;
+  margin: 0 0 8px;
+}
+
+.da-hub-meta {
+  margin: 0;
+  font-size: 12px;
+  color: var(--da-muted);
+  text-align: left;
+}
+
+.da-hub-cta,
+.da-hub-refresh {
+  width: 100%;
+  margin-top: 12px;
+}
+
+.da-hub-mod-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 0;
+}
+
+.da-hub-loading {
+  min-height: 80px;
+}
+
+/* ── 五模块答题页：flex 撑满，按钮贴底，减少下方空洞 ── */
+.da-module-v2.page.on {
+  display: flex;
+  flex-direction: column;
+}
+
+.da-module-v2 .pc {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  gap: 12px;
+  padding-top: 10px;
+  padding-bottom: calc(var(--da-bottom-nav-h) + 10px);
+  min-height: 100%;
+}
+
+.da-module-v2 .prog-section,
+.da-module-v2 .da-guide-bar,
+.da-module-v2 .da-callout,
+.da-module-v2 .da-cog-static,
+.da-module-v2 .da-conflict-list,
+.da-module-v2 .da-mod-footnote,
+.da-module-v2 .card:not(.da-mod-v2-extra-inner),
+.da-module-v2 .card-w:not(.da-mod-v2-extra-inner),
+.da-module-v2 .da-mem-prompt-wrap,
+.da-module-v2 .da-rel-scene,
+.da-module-v2 .da-emo-train,
+.da-module-v2 .da-voice-literary,
+.da-module-v2 .da-voice-record {
+  display: none !important;
+}
+
+.da-mod-v2-meta {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--da-muted);
+  letter-spacing: 0.04em;
+  margin: 0;
+  text-align: left;
+}
+
+.da-mod-v2-q {
+  font-family: 'Noto Serif SC', serif;
+  font-size: 19px;
+  font-weight: 600;
+  line-height: 1.45;
+  color: var(--da-ink);
+  margin: 0;
+  text-align: left;
+}
+
+.da-mod-v2-quote {
+  font-size: 15px;
+  line-height: 1.55;
+  color: var(--da-body);
+  background: #fff;
+  border-radius: var(--da-radius-sm);
+  padding: 12px 14px;
+  margin: 0;
+  border: 1px solid var(--da-border);
+  text-align: left;
+}
+
+.da-mod-v2-input {
+  width: 100%;
+  flex: 1 1 auto;
+  min-height: 120px;
+  border: 1px solid var(--da-border);
+  border-radius: var(--da-radius-sm);
+  padding: 14px 16px;
+  font-size: 15px;
+  line-height: 1.55;
+  font-family: inherit;
+  resize: none;
+  outline: none;
+  background: #fff;
+  color: var(--da-ink);
+}
+
+.da-mod-v2-input:focus {
+  border-color: var(--da-sage);
+  box-shadow: 0 0 0 3px rgba(89, 96, 89, 0.1);
+}
+
+.da-mod-v2-choices {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+}
+
+.da-mod-v2-choices .choice {
+  text-align: left;
+  padding: 12px 14px;
+  background: #fff;
+  border: 1px solid var(--da-border);
+}
+
+.da-mod-v2-choices .choice.selected {
+  border-color: var(--da-sage);
+  box-shadow: 0 0 0 1px var(--da-sage);
+}
+
+.da-mod-v2-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 8px;
+  flex-shrink: 0;
+  margin-top: auto;
+  padding-top: 4px;
+}
+
+.da-mod-v2-actions .btn-p,
+.da-mod-v2-actions .btn-o {
+  padding: 12px 8px;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.da-mod-v2-extra {
+  flex-shrink: 0;
+  background: #fff;
+  border: 1px solid var(--da-border);
+  border-radius: var(--da-radius-sm);
+  padding: 10px 14px;
+}
+
+.da-mod-v2-extra summary {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--da-muted);
+  cursor: pointer;
+  list-style: none;
+  text-align: left;
+}
+
+.da-mod-v2-extra summary::-webkit-details-marker { display: none; }
+
+.da-mod-v2-extra-body {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.da-mod-v2-extra-body input,
+.da-mod-v2-extra-body button {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-family: inherit;
+}
+
+.da-mod-v2-extra-body input {
+  border: 1px solid var(--da-border);
+  background: #fff;
+}
+
+.da-mod-v2-queue {
+  flex-shrink: 0;
+  font-size: 12px;
+  color: var(--da-sage);
+  background: #fff;
+  border-radius: var(--da-radius-sm);
+  padding: 10px 12px;
+  border: 1px dashed var(--da-border);
+  text-align: left;
+}
+
+.da-mod-v2-queue ul { margin: 6px 0 0; padding-left: 18px; }
+
+.da-mod-v2-queue[hidden] { display: none !important; }
+
+/* ── 主页情境答题（与训练页同一套白卡片） ── */
+.da-guide-card-v2 {
+  background: #fff;
+  border-radius: var(--da-radius-sm);
+  padding: 16px;
+  border: 1px solid var(--da-border);
+  text-align: left;
+}
+
+.da-guide-q-v2 {
+  font-family: 'Noto Serif SC', serif;
+  font-size: 19px;
+  font-weight: 600;
+  line-height: 1.45;
+  margin: 0 0 12px;
+  text-align: left;
+}
+
+.da-guide-meta-v2 {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--da-muted);
+  margin-bottom: 8px;
+  text-align: left;
+}
+
+.da-home-answer {
+  width: 100%;
+  min-height: 100px;
+  border: 1px solid var(--da-border);
+  border-radius: var(--da-radius-sm);
+  padding: 12px 14px;
+  font-size: 15px;
+  font-family: inherit;
+  background: #fff;
+}
+
+.da-guide-actions-v2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.da-coach,
+.da-skip-note,
+.da-sync-note,
+.da-five-layers-intro-host {
+  display: none !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .da-module-list .module-row {
+    animation: none;
+    transition: none;
+  }
+}

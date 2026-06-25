@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+<title>数字方舟</title>
+<script>
+(function () {
+  if (window.matchMedia('(max-width: 640px), (hover: none) and (pointer: coarse)').matches) {
+    document.documentElement.classList.add('da-native');
+  }
+})();
+</script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@500;600&family=Noto+Sans+SC:wght@400;500;600&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="/css/sanctuary-shell.css"/>
+<link rel="stylesheet" href="/js/app-shell.css"/>
+<link rel="stylesheet" href="/css/digital-ark-ui.css"/>
+<link rel="stylesheet" href="/css/training-flow-v2.css"/>
+</head>
+<body>
+<div class="phone">
+
+<!-- ─────────── TOP BAR ─────────── -->
+<header class="topbar">
+  <div class="topbar-avatar">
+    <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuD9CoAWFz6hMRGOhuFmcuf1GHNeVfSH2zLbrtfNdU4txcJclXi6DkYCaPiabLusTHGedU3EHqjNSzSLKEL7CYSvE--n7Mt2-j-72cPi20p5hgWyEUmPgSTsqL_yxGXTSVHpLeSbTwzdqnfEW_gSoUQEg4hv4m8Z2TnmzBebpctdchgCJdYZ-w_h2AcVbzcHPYnotKWOWnaUIaICREgPnS9Og-kq70jW_pn5KNvZkCMymFge4kmsKNRh_Tj3xpG87Qkbno4Tmguh-I7i"
+      style="width:100%;height:100%;object-fit:cover;" alt=""/>
+  </div>
+  <span class="topbar-title">数字方舟</span>
+  <span class="mi topbar-apps" title="切换应用">apps</span>
+</header>
+
+<!-- ═══════════════════════════
+  PAGE 1 · 伴侣
+═══════════════════════════ -->
+<div id="p0" class="page on da-home-page" aria-busy="true"></div>
+
+<!-- ═══════════════════════════
+  PAGE 2 · 训练总览
+═══════════════════════════ -->
+<div id="p1" class="page da-training-page">
+  <div class="pc da-training-hub-host" aria-live="polite">
+    <div class="da-empty-card da-hub-loading"><span class="mi">hourglass_empty</span><p>加载训练总览…</p></div>
+  </div>
+</div>
+
+<!-- PAGE 3 · 音色训练 -->
+<div id="p2" class="page da-module-page da-module-v2" data-module="voice">
+  <div class="pc">
+    <p class="da-mod-v2-meta">音色训练</p>
+    <h2 class="da-mod-v2-q da-voice-text">加载题目中…</h2>
+    <blockquote class="da-mod-v2-quote da-voice-literary" hidden></blockquote>
+    <textarea class="da-mod-v2-input da-mod-v2-voice-fallback" rows="3" placeholder="没麦克风？把要读的话贴在这里"></textarea>
+    <div class="da-mod-v2-actions">
+      <button type="button" class="btn-p da-mod-submit">提交</button>
+      <button type="button" class="btn-o da-mod-vague">有印象</button>
+      <button type="button" class="btn-o da-mod-skip">跳过</button>
+    </div>
+    <details class="da-mod-v2-extra">
+      <summary>录音（可选）</summary>
+      <div class="da-mod-v2-extra-body">
+        <button type="button" class="btn-o mic-record" style="display:flex;align-items:center;justify-content:center;gap:8px;"><span class="mi">mic</span>按住录音</button>
+        <p class="t-body-sm" style="color:#767872;">录完仍需点「提交」</p>
+      </div>
+    </details>
+  </div>
+</div>
+
+<!-- ═══════════════════════════
+  PAGE 4 · 记忆训练
+═══════════════════════════ -->
+<div id="p3" class="page da-module-page da-module-v2" data-module="memory">
+  <div class="pc">
+    <p class="da-mod-v2-meta">记忆训练</p>
+    <h2 class="da-mod-v2-q da-mem-prompt">加载题目中…</h2>
+    <textarea class="da-mod-v2-input da-mem-input" rows="5" placeholder="随便写，碎片、关键词、感受都可以"></textarea>
+    <div class="da-mod-v2-actions">
+      <button type="button" class="btn-p da-mod-submit">提交</button>
+      <button type="button" class="btn-o da-mod-vague">有印象</button>
+      <button type="button" class="btn-o da-mod-skip">跳过</button>
+    </div>
+    <details class="da-mod-v2-extra">
+      <summary>补充细节（可选）</summary>
+      <div class="da-mod-v2-extra-body">
+        <input type="text" id="daMemTime" placeholder="时间（可选）"/>
+        <input type="text" id="daMemPlace" placeholder="地点（可选）"/>
+        <input type="text" id="daMemPeople" placeholder="相关的人（可选）"/>
+        <input type="text" id="daMemEmotion" placeholder="感受（可选）"/>
+        <button type="button" class="btn-o da-mem-upload-btn">附加照片（可选）</button>
+      </div>
+    </details>
+    <div class="da-mod-v2-queue" hidden>
+      <span>已记 <strong class="da-mod-queue-n">0</strong> 条 · <button type="button" class="btn-o da-mod-add-another" style="padding:4px 10px;font-size:12px;">再记一条</button></span>
+      <ul class="da-mod-queue-list"></ul>
+      <button type="button" class="btn-p da-mod-next" style="width:100%;margin-top:8px;">下一题</button>
+    </div>
+    <input type="file" id="daMemPhotoInput" accept="image/*" hidden/>
+    <div class="da-mem-tags" hidden><span class="chip chip-o chip-add">+ 标签</span></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════
+  PAGE 5 · 关系训练
+═══════════════════════════ -->
+<div id="p4" class="page da-module-page da-module-v2" data-module="relationship">
+  <div class="pc">
+    <p class="da-mod-v2-meta">关系训练</p>
+    <h2 class="da-mod-v2-q da-rel-title">加载中…</h2>
+    <textarea class="da-mod-v2-input da-rel-input" rows="4" placeholder="你会怎么回应？口语化即可"></textarea>
+    <div class="da-mod-v2-actions">
+      <button type="button" class="btn-p da-mod-submit">提交</button>
+      <button type="button" class="btn-o da-mod-vague">有印象</button>
+      <button type="button" class="btn-o da-mod-skip">跳过</button>
+    </div>
+    <details class="da-mod-v2-extra">
+      <summary>快捷回应（可选）</summary>
+      <div class="da-mod-v2-extra-body da-mod-v2-choices da-rel-dynamic-choices"></div>
+    </details>
+  </div>
+</div>
+
+<!-- ═══════════════════════════
+  PAGE 6 · 情感共鸣
+═══════════════════════════ -->
+<div id="p5" class="page da-module-page da-module-v2" data-module="emotion">
+  <div class="pc">
+    <p class="da-mod-v2-meta">情感训练</p>
+    <h2 class="da-mod-v2-q da-emo-scene">加载中…</h2>
+    <textarea class="da-mod-v2-input da-emo-input" rows="4" placeholder="当时你会说什么、做什么？"></textarea>
+    <div class="da-mod-v2-actions">
+      <button type="button" class="btn-p da-mod-submit">提交</button>
+      <button type="button" class="btn-o da-mod-vague">有印象</button>
+      <button type="button" class="btn-o da-mod-skip">跳过</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════
+  PAGE 7 · 认知训练
+═══════════════════════════ -->
+<div id="p6" class="page da-module-page da-module-v2" data-module="cognition">
+  <div class="pc">
+    <p class="da-mod-v2-meta">认知训练</p>
+    <h2 class="da-mod-v2-q da-cog-question">加载中…</h2>
+    <div class="da-mod-v2-choices da-cog-options"></div>
+    <textarea class="da-mod-v2-input da-cog-note" rows="3" placeholder="可选：补充一句你的想法" hidden></textarea>
+    <div class="da-mod-v2-actions">
+      <button type="button" class="btn-p da-mod-submit" hidden>提交排序</button>
+      <button type="button" class="btn-o da-mod-vague" hidden>有印象</button>
+      <button type="button" class="btn-o da-mod-skip">跳过</button>
+    </div>
+    <details class="da-mod-v2-extra da-cog-rank-extra">
+      <summary>价值观排序（可选）</summary>
+      <div class="da-mod-v2-extra-body da-cog-drag-host">
+        <div class="drag-row"><span class="mi">drag_indicator</span><span class="t-body">家庭</span></div>
+        <div class="drag-row"><span class="mi">drag_indicator</span><span class="t-body">荣誉</span></div>
+        <div class="drag-row"><span class="mi">drag_indicator</span><span class="t-body">真理</span></div>
+        <div class="drag-row"><span class="mi">drag_indicator</span><span class="t-body">平和</span></div>
+        <button type="button" class="btn-o da-cog-rank-submit">提交价值排序</button>
+      </div>
+    </details>
+  </div>
+</div>
+
+<!-- PAGE 8 · 我的（内容由 profile-center.js 渲染） -->
+<div id="p7" class="page da-profile-page">
+  <div class="pc">
+    <div class="da-profile-host"></div>
+  </div>
+</div>
+
+<!-- ─────────── BOTTOM NAV ─────────── -->
+<nav class="bottom-nav" id="daBottomNav">
+  <button type="button" class="nav-btn on" id="n0" data-nav-page="0">
+    <span class="mi">auto_awesome</span><span class="nav-lbl">陪伴</span>
+  </button>
+  <button type="button" class="nav-btn" id="n1" data-nav-page="1">
+    <span class="mi">psychology</span><span class="nav-lbl">训练</span>
+  </button>
+  <button type="button" class="nav-btn" id="n2" data-nav-page="7">
+    <span class="mi">account_circle</span><span class="nav-lbl">我的</span>
+  </button>
+</nav>
+
+</div><!-- /phone -->
+<div id="toast" class="toast"></div>
+<script src="/js/api-core.js"></script>
+<script src="/js/layer-explain.js"></script>
+<script src="/js/avatar-preset.js"></script>
+<script src="/js/profile-center.js"></script>
+<script>
+  let cur = 0;
+  const navMap = { 0: 0, 1: 1, 2: 1, 3: 1, 4: 1, 5: 1, 6: 1, 7: 2 };
+  function go(i) {
+    document.getElementById('p'+cur).classList.remove('on');
+    document.getElementById('n'+navMap[cur]).classList.remove('on');
+    cur = i;
+    document.getElementById('p'+cur).classList.add('on');
+    document.getElementById('n'+navMap[cur]).classList.add('on');
+    document.getElementById('p'+cur).scrollTop = 0;
+  }
+  document.querySelectorAll('[data-nav-page]').forEach(btn => {
+    btn.addEventListener('click', e => {
+      e.preventDefault();
+      go(Number(btn.dataset.navPage));
+    });
+  });
+</script>
+<script src="/js/apps-bridge.js"></script>
+</body>
+</html>

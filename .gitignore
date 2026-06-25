@@ -1,0 +1,37 @@
+# Dependencies
+node_modules/
+
+# Environment & secrets
+.env
+.env.local
+.env.*.local
+
+# Runtime / user data
+data/alisa-training-local/
+reports/
+test_data/
+
+# Build output
+dist/
+out/
+*.log
+
+# OS & editor
+.DS_Store
+Thumbs.db
+desktop.ini
+*.lnk
+
+# Electron / Playwright
+.playwright/
+playwright-report/
+test-results/
+
+# Python / ML artifacts
+__pycache__/
+*.pyc
+*.pt
+*.safetensors
+*.bin
+.venv/
+venv/

@@ -1,0 +1,65 @@
+{
+  "name": "digital-ark",
+  "version": "1.1.0",
+  "description": "数字方舟 - 有情感连续性的本地数字分身训练与陪护系统",
+  "main": "electron/main.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js",
+    "browser": "node server.js",
+    "desktop": "electron .",
+    "install:electron": "npm install electron@28.3.3 --save-dev",
+    "build:desktop": "electron-builder --win --x64",
+    "train": "node scripts/export-lora-corpus.js",
+    "train:lora": "node scripts/export-lora-corpus.js && python scripts/train-lora.py",
+    "ollama:persona": "node scripts/create-ollama-model.js",
+    "test": "node test.js && node --test tests/training-ingest.test.js && node --test tests/api.test.js",
+    "verify:pipeline": "node scripts/verify-training-pipeline.js",
+    "flow-audit": "node scripts/flow-audit.js",
+    "simulate:alisa": "node scripts/simulate-alisa-user.js",
+    "train:alisa": "node scripts/alisa-user-full-training.js",
+    "verify:alisa": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/start-alisa-local-verify.ps1",
+    "train:eval:alisa": "node scripts/train-and-eval-alisa.js",
+    "browser-e2e": "node scripts/browser-e2e.js"
+  },
+  "keywords": [
+    "ai-companion",
+    "digital-avatar",
+    "emotional-ai",
+    "local-llm"
+  ],
+  "author": "Digital Ark Team",
+  "license": "MIT",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2"
+  },
+  "devDependencies": {
+    "electron": "^28.3.3",
+    "electron-builder": "^24.13.3",
+    "nodemon": "^3.0.2",
+    "playwright": "^1.60.0"
+  },
+  "build": {
+    "appId": "com.digitalark.app",
+    "productName": "数字方舟",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "**/*",
+      "!dist/**",
+      "!test_data/**"
+    ],
+    "win": {
+      "target": [
+        "nsis"
+      ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true
+    }
+  }
+}

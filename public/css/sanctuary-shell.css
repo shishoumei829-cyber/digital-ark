@@ -1,0 +1,538 @@
+/* 数字方舟 · 手机壳与基础组件（sanctuary / training 共用） */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --da-notch-h: 46px;
+  --da-topbar-pad-top: calc(var(--da-notch-h) + 10px);
+  --da-bottom-nav-h: 76px;
+  --da-page-pad-bottom: calc(var(--da-bottom-nav-h) + 16px);
+}
+
+body {
+  font-family: 'Noto Sans SC', sans-serif;
+  background: #e8e4dc;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 0;
+  margin: 0;
+  overflow: hidden;
+}
+
+.phone {
+  width: 390px;
+  height: min(844px, 100vh);
+  max-height: 100vh;
+  min-height: 0;
+  background: #fdf9f3;
+  border-radius: 50px;
+  overflow: hidden;
+  box-shadow:
+    0 50px 100px rgba(0, 0, 0, 0.22),
+    0 0 0 1px rgba(0, 0, 0, 0.06),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.5);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.phone::before {
+  content: '';
+  position: absolute;
+  top: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 120px;
+  height: 34px;
+  background: #111;
+  border-radius: 22px;
+  z-index: 200;
+}
+
+.t-label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.07em;
+  color: #767872;
+  text-transform: uppercase;
+}
+
+.t-body-sm {
+  font-size: 13px;
+  line-height: 1.55;
+  color: #454742;
+}
+
+.t-body {
+  font-size: 15px;
+  line-height: 1.6;
+  color: #1c1c18;
+}
+
+.t-pct {
+  font-family: 'Noto Serif SC', serif;
+  font-size: 44px;
+  font-weight: 600;
+  color: #1c1c18;
+  letter-spacing: -0.03em;
+  line-height: 1;
+}
+
+.t-pct.da-pct-pending {
+  font-size: 36px;
+  color: #767872;
+}
+
+.t-title {
+  font-family: 'Noto Serif SC', serif;
+  font-size: 21px;
+  font-weight: 600;
+  color: #1c1c18;
+}
+
+.t-section {
+  font-family: 'Noto Serif SC', serif;
+  font-size: 18px;
+  font-weight: 600;
+  color: #1c1c18;
+}
+
+.pbar-wrap {
+  width: 100%;
+  max-width: 260px;
+  height: 5px;
+  background: #ece7e2;
+  border-radius: 99px;
+  overflow: hidden;
+}
+
+.pbar-fill {
+  height: 100%;
+  background: #596059;
+  border-radius: 99px;
+  transition: width 0.4s ease;
+}
+
+.prog-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 10px;
+  padding: 20px 0 22px;
+}
+
+.topbar {
+  flex-shrink: 0;
+  padding: var(--da-topbar-pad-top) 14px 12px;
+  display: grid;
+  grid-template-columns: minmax(40px, auto) 1fr minmax(40px, auto);
+  align-items: center;
+  gap: 8px;
+  background: rgba(253, 249, 243, 0.92);
+  backdrop-filter: blur(14px);
+  border-bottom: 1px solid rgba(198, 199, 192, 0.28);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.topbar-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 1px solid #d6d3cd;
+  flex-shrink: 0;
+}
+
+.topbar-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.topbar-title {
+  grid-column: 2;
+  font-family: 'Noto Serif SC', serif;
+  font-size: 17px;
+  font-weight: 600;
+  color: #5e5e5c;
+  text-align: center;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  padding: 0 4px;
+}
+
+.topbar-apps,
+.topbar > .mi.topbar-apps,
+.topbar > .mi[title*='切换'] {
+  grid-column: 3;
+  justify-self: end;
+  cursor: pointer;
+  padding: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.mi {
+  font-family: 'Material Symbols Outlined';
+  font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+  font-size: 22px;
+  line-height: 1;
+  color: #767872;
+}
+
+.mi-f { font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+.mi-sm { font-size: 18px; }
+
+.bottom-nav {
+  flex-shrink: 0;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  align-items: center;
+  gap: 4px;
+  padding: 10px 12px 30px;
+  background: rgba(247, 243, 237, 0.96);
+  backdrop-filter: blur(16px);
+  border-top: 1px solid rgba(198, 199, 192, 0.22);
+  position: relative;
+  z-index: 120;
+}
+
+.nav-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  cursor: pointer;
+  padding: 7px 8px;
+  border-radius: 99px;
+  border: none;
+  background: transparent;
+  transition: background 0.2s;
+  min-width: 0;
+}
+
+.nav-btn.on { background: #dae2d8; }
+.nav-btn .mi { font-size: 20px; color: #767872; }
+.nav-btn.on .mi {
+  color: #596059;
+  font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+}
+
+.nav-lbl { font-size: 10px; font-weight: 600; color: #767872; }
+.nav-btn.on .nav-lbl { color: #596059; }
+
+.page {
+  display: none;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+}
+
+.page.on { display: flex; }
+.pc {
+  padding: 0 20px var(--da-page-pad-bottom);
+  flex: 1;
+  min-height: 0;
+}
+
+.card { background: #f7f3ed; border-radius: 20px; padding: 18px; }
+.card-w { background: #fff; border-radius: 20px; padding: 18px; }
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 14px;
+  border-radius: 99px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.chip-g { background: #dae2d8; color: #5d655d; }
+.chip-o { background: transparent; border: 1px solid #c6c7c0; color: #767872; }
+.chip-s { background: #596059; color: #fff; }
+
+.btn-p {
+  width: 100%;
+  padding: 16px;
+  background: #596059;
+  color: #fff;
+  border: none;
+  border-radius: 99px;
+  font-size: 15px;
+  font-weight: 600;
+  font-family: 'Noto Sans SC', sans-serif;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: background 0.2s, box-shadow 0.2s;
+}
+
+.btn-o {
+  width: 100%;
+  padding: 13px;
+  background: transparent;
+  color: #454742;
+  border: 1px solid #c6c7c0;
+  border-radius: 99px;
+  font-size: 14px;
+  font-weight: 500;
+  font-family: 'Noto Sans SC', sans-serif;
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s;
+}
+
+.choice {
+  width: 100%;
+  text-align: left;
+  background: #fff;
+  border: 1px solid transparent;
+  border-radius: 16px;
+  padding: 14px;
+  cursor: pointer;
+  font-family: 'Noto Sans SC', sans-serif;
+  transition: border-color 0.18s, box-shadow 0.18s;
+}
+
+.choice:hover { border-color: rgba(89, 96, 89, 0.3); }
+
+.drag-row {
+  display: flex;
+  align-items: center;
+  background: #f7f3ed;
+  border-radius: 12px;
+  padding: 14px 16px;
+  gap: 12px;
+}
+
+.module-row {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #fff;
+  border: 1px solid rgba(198, 199, 192, 0.25);
+  border-radius: 16px;
+  padding: 13px 14px;
+  cursor: pointer;
+  font-family: inherit;
+  text-align: left;
+  transition: border-color 0.18s, box-shadow 0.18s;
+}
+
+.module-row strong {
+  display: block;
+  font-size: 14px;
+  color: #1c1c18;
+  margin-bottom: 2px;
+}
+
+.module-row small {
+  display: block;
+  font-size: 11px;
+  color: #767872;
+}
+
+.mic-record {
+  width: 86px;
+  height: 86px;
+  border-radius: 50%;
+  border: none;
+  background: #596059;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 12px 32px rgba(89, 96, 89, 0.34);
+}
+
+.chat-bubble {
+  max-width: 82%;
+  padding: 12px 14px;
+  border-radius: 18px;
+  font-size: 14px;
+  line-height: 1.55;
+}
+
+.chat-bubble.ai {
+  align-self: flex-start;
+  background: #fff;
+  color: #1c1c18;
+  border-top-left-radius: 6px;
+}
+
+.chat-bubble.me {
+  align-self: flex-end;
+  background: #596059;
+  color: #fff;
+  border-top-right-radius: 6px;
+}
+
+.hero-progress {
+  text-align: center;
+  width: 100%;
+  max-width: 260px;
+  margin: 0 auto;
+}
+
+.hero-pct {
+  font-family: 'Noto Serif SC', serif;
+  font-size: 44px;
+  font-weight: 600;
+  color: #1c1c18;
+  line-height: 1;
+  margin-bottom: 10px;
+}
+
+.stage-badge {
+  display: inline-block;
+  margin-top: 10px;
+  padding: 6px 14px;
+  border-radius: 99px;
+  background: #dae2d8;
+  font-size: 12px;
+  font-weight: 600;
+  color: #596059;
+}
+
+@keyframes breathe {
+  0%, 100% { transform: scale(1); opacity: 0.22; }
+  50% { transform: scale(1.1); opacity: 0.1; }
+}
+
+.breathing { animation: breathe 8s ease-in-out infinite; }
+
+/* 交互 · 无障碍 */
+button:focus-visible,
+.choice:focus-visible,
+.nav-btn:focus-visible,
+.da-segment-btn:focus-visible,
+.da-back:focus-visible,
+.module-row:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: 2px solid #596059;
+  outline-offset: 2px;
+}
+
+body.da-desktop {
+  --da-notch-h: 0px;
+  --da-topbar-pad-top: 16px;
+}
+
+/* 真机浏览器：去掉「手机套手机」外壳，铺满屏幕 */
+html.da-native,
+body.da-native-mobile {
+  --da-notch-h: 0px;
+  --da-topbar-pad-top: max(12px, env(safe-area-inset-top, 0px));
+  --da-bottom-nav-h: calc(62px + env(safe-area-inset-bottom, 0px));
+}
+
+html.da-native body,
+body.da-native-mobile {
+  background: #fdf9f3;
+  display: flex;
+  align-items: stretch;
+  justify-content: stretch;
+  min-height: 100dvh;
+  height: 100dvh;
+  overflow: hidden;
+  padding: 0;
+}
+
+html.da-native .phone,
+body.da-native-mobile .phone {
+  width: 100%;
+  max-width: 100%;
+  height: 100dvh;
+  max-height: 100dvh;
+  min-height: 100dvh;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+html.da-native .phone::before,
+body.da-native-mobile .phone::before {
+  display: none;
+}
+
+html.da-native .bottom-nav,
+body.da-native-mobile .bottom-nav {
+  padding-bottom: max(12px, env(safe-area-inset-bottom, 12px));
+}
+
+html.da-native .nav-btn,
+body.da-native-mobile .nav-btn {
+  min-height: 48px;
+  touch-action: manipulation;
+}
+
+html.da-native .da-app-menu,
+body.da-native-mobile .da-app-menu {
+  right: 12px;
+}
+
+@media (max-width: 640px) {
+  body:not(.da-desktop) {
+    background: #fdf9f3;
+    align-items: stretch;
+    padding: 0;
+  }
+
+  body:not(.da-desktop) .phone {
+    width: 100%;
+    max-width: 100%;
+    height: 100dvh;
+    max-height: 100dvh;
+    min-height: 100dvh;
+    border-radius: 0;
+    box-shadow: none;
+  }
+
+  body:not(.da-desktop) .phone::before {
+    display: none;
+  }
+
+  body:not(.da-desktop) {
+    --da-notch-h: 0px;
+    --da-topbar-pad-top: max(12px, env(safe-area-inset-top, 0px));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .breathing,
+  .da-home-shell,
+  .da-module-list .module-row,
+  .da-msg-cards .msg-card,
+  #p0.da-home-page[aria-busy="true"]:empty::before {
+    animation: none !important;
+  }
+
+  .pbar-fill,
+  .da-mod-bar i,
+  .btn-p,
+  .btn-o,
+  .choice,
+  .module-row,
+  .nav-btn,
+  .da-segment-btn {
+    transition: none !important;
+  }
+
+  .da-module-page .mic-record:hover {
+    transform: none !important;
+  }
+
+  .da-module-list .module-row:hover {
+    transform: none !important;
+  }
+}

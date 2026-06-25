@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>训练数据审查 · 数字方舟</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="/js/app-shell.css"/>
+<style>
+  body { font-family: 'Noto Sans SC', sans-serif; background: #e8e4dc; margin: 0; padding: 24px; }
+  .wrap { max-width: 960px; margin: 0 auto; }
+  h1 { font-size: 22px; color: #1c1c18; margin-bottom: 8px; }
+  .sub { color: #767872; font-size: 14px; margin-bottom: 20px; }
+  .tabs { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
+  .tab { padding: 8px 14px; border-radius: 99px; border: 1px solid #c6c7c0; background: #fff; cursor: pointer; font-size: 13px; }
+  .tab.on { background: #596059; color: #fff; border-color: #596059; }
+  .panel { display: none; background: #fdf9f3; border-radius: 16px; padding: 20px; box-shadow: 0 8px 32px rgba(0,0,0,0.08); }
+  .panel.on { display: block; }
+  pre { white-space: pre-wrap; word-break: break-word; font-size: 13px; line-height: 1.6; background: #f7f3ed; padding: 14px; border-radius: 12px; max-height: 60vh; overflow: auto; }
+  .card { background: #fff; border-radius: 12px; padding: 14px; margin-bottom: 10px; border: 1px solid #ece7e2; }
+  .card h3 { margin: 0 0 6px; font-size: 15px; }
+  .card p { margin: 4px 0; font-size: 13px; color: #454742; line-height: 1.55; }
+  .actions { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 16px; }
+  .btn { padding: 10px 16px; border-radius: 99px; border: none; background: #596059; color: #fff; cursor: pointer; font-weight: 600; }
+  .btn-o { background: #fff; color: #454742; border: 1px solid #c6c7c0; }
+  .stat { display: inline-block; margin-right: 12px; font-size: 13px; color: #596059; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1 id="title">训练数据审查</h1>
+  <p class="sub" id="subtitle">加载中…</p>
+  <div class="actions">
+    <button class="btn" type="button" id="btnReingest" style="display:none;">强制重新导入预置 Persona</button>
+    <button class="btn btn-o" type="button" id="btnExport">导出 LoRA 语料</button>
+    <a class="btn btn-o" id="btnBack" href="/apps/training.html" style="text-decoration:none;display:inline-block;">返回训练端</a>
+  </div>
+  <div id="stats"></div>
+  <div class="tabs" id="tabs"></div>
+  <div id="panels"></div>
+</div>
+<script src="/js/api-core.js"></script>
+<script>
+let data = null;
+let personaId = 'alisa-kujo';
+let isDemo = false;
+
+async function load() {
+  const setupR = await DA.api('GET', '/training/setup');
+  isDemo = setupR.data?.mode === 'demo';
+  personaId = isDemo ? 'alisa-kujo' : 'user';
+
+  if (isDemo) {
+    document.getElementById('btnReingest').style.display = '';
+    const r = await DA.api('GET', '/persona/review/alisa-kujo');
+    if (!r.success) { document.getElementById('subtitle').textContent = r.error || '加载失败'; return; }
+    data = r.data;
+    renderDemo(r.data);
+    return;
+  }
+
+  const r = await DA.api('GET', '/training/review');
+  if (!r.success) { document.getElementById('subtitle').textContent = r.error || '加载失败'; return; }
+  data = r.data;
+  renderPersonal(r.data);
+}
+
+function renderDemo(d) {
+  const b = d.bundle;
+  document.getElementById('title').textContent = b.display_name + ' · 演示数据审查';
+  document.getElementById('subtitle').textContent = (b.source_note || '') + '（演示模式）';
+  const live = d.live || {};
+  document.getElementById('stats').innerHTML = [
+    `<span class="stat">预置记忆 ${(b.memories||[]).length} 条</span>`,
+    `<span class="stat">已训练入库 ${live.all_memory_count||0}</span>`,
+    `<span class="stat">关系 ${(b.relationships||[]).length} 人</span>`,
+    `<span class="stat">对话样本 ${(b.dialogue_samples||[]).length} 条</span>`,
+    `<span class="stat">整体进度 ${Math.round((live.progress?.overall_progress||0)*100)}%</span>`
+  ].join('');
+  buildTabs([
+    ['meta', '人物设定', renderMeta(b)],
+    ['memories', '预置记忆', renderMemories(b.memories)],
+    ['live', '已入库快照', renderLiveMemories(live.memories || live)]
+  ]);
+}
+
+function renderPersonal(d) {
+  const name = d.subject_name || '您的数字分身';
+  document.getElementById('title').textContent = name + ' · 训练数据审查';
+  document.getElementById('subtitle').textContent =
+    `记录者：${d.trainer_name || '—'} · 模式：个人训练 · 7日引导 ${d.guide?.progress?.completed||0}/${d.guide?.progress?.total||0}`;
+  const live = d.live || {};
+  document.getElementById('stats').innerHTML = [
+    `<span class="stat">训练记忆 ${live.all_memory_count||0} 条</span>`,
+    `<span class="stat">关系人 ${(live.relationships||[]).length} 人</span>`,
+    `<span class="stat">训练会话 ${live.sessions_count||0}</span>`,
+    `<span class="stat">整体进度 ${Math.round((live.progress?.overall_progress||0)*100)}%</span>`
+  ].join('');
+  buildTabs([
+    ['setup', '身份设定', renderSetup(d.setup)],
+    ['memories', '已训练记忆', renderLiveMemories(live.memories)],
+    ['relationships', '关系人', renderLiveRelationships(live.relationships)],
+    ['guide', '7日引导', `<pre>${JSON.stringify(d.guide, null, 2)}</pre>`]
+  ]);
+}
+
+function buildTabs(sections) {
+  const tabs = document.getElementById('tabs');
+  const panels = document.getElementById('panels');
+  tabs.innerHTML = '';
+  panels.innerHTML = '';
+  sections.forEach(([id, label, html], i) => {
+    const t = document.createElement('button');
+    t.type = 'button';
+    t.className = 'tab' + (i === 0 ? ' on' : '');
+    t.textContent = label;
+    t.onclick = () => {
+      tabs.querySelectorAll('.tab').forEach(x => x.classList.remove('on'));
+      panels.querySelectorAll('.panel').forEach(x => x.classList.remove('on'));
+      t.classList.add('on');
+      document.getElementById('p-' + id).classList.add('on');
+    };
+    tabs.appendChild(t);
+    const p = document.createElement('div');
+    p.id = 'p-' + id;
+    p.className = 'panel' + (i === 0 ? ' on' : '');
+    p.innerHTML = html || '<p>暂无数据</p>';
+    panels.appendChild(p);
+  });
+}
+
+function renderMeta(b) {
+  return `<pre>${JSON.stringify({ meta: b.meta, aliases: b.aliases, trainee_label: b.trainee_label }, null, 2)}</pre>`;
+}
+function renderMemories(list) {
+  return (list||[]).length
+    ? (list||[]).map(m => `<div class="card"><h3>[${m.tier}] ${m.time||''} ${m.place||''}</h3><p>${m.content}</p></div>`).join('')
+    : '<p>暂无</p>';
+}
+function renderLiveMemories(list) {
+  const items = Array.isArray(list) ? list : (list?.items || []);
+  return items.length
+    ? items.map(m => `<div class="card"><h3>[${m.tier||'memory'}] ${m.time||''}</h3><p>${m.content}</p><p>标签：${(m.tags||[]).join('、')||'—'}</p></div>`).join('')
+    : '<p>尚未提交训练记忆。请从训练端「记忆训练」录入。</p>';
+}
+function renderLiveRelationships(list) {
+  return (list||[]).length
+    ? (list||[]).map(r => `<div class="card"><h3>${r.name}（${r.type}）</h3><p>${r.notes||''}</p></div>`).join('')
+    : '<p>尚未建档关系人。</p>';
+}
+function renderSetup(s) {
+  return `<pre>${JSON.stringify(s, null, 2)}</pre>`;
+}
+function renderLive(live) {
+  return `<pre>${JSON.stringify(live, null, 2)}</pre>`;
+}
+
+document.getElementById('btnReingest').onclick = async () => {
+  const r = await DA.api('POST', '/persona/ingest', { persona_id: 'alisa-kujo', force: true });
+  DA.toast(r.success ? '已重新导入' : (r.error||'失败'), r.success ? '' : 'error');
+  load();
+};
+document.getElementById('btnExport').onclick = async () => {
+  const r = await DA.api('POST', '/fine-tune/export', { persona_id: isDemo ? 'alisa-kujo' : 'user' });
+  if (r.success) DA.toast(`已导出 ${r.data.rows} 条`);
+  else DA.toast(r.error||'失败', 'error');
+};
+
+load();
+</script>
+</body>
+</html>
